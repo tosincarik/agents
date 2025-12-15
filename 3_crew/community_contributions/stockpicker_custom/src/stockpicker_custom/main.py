@@ -16,7 +16,6 @@ def run():
     """
     inputs = {
         'sector': 'technology',
-        'region': 'Africa'
     }
     result = StockpickerCustom().crew().kickoff(inputs=inputs)
 

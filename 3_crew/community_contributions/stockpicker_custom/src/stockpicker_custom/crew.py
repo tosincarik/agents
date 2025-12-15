@@ -37,19 +37,14 @@ class TrendingCompanyResearchList(BaseModel):
 class StockpickerCustom():
     """StockpickerCustom crew"""
 
-    agents: List[BaseAgent]
-    tasks: List[Task]
+    agents_config = 'config/agents.yaml'
+    tasks_config = 'config/tasks.yaml'
+ 
 
-    # Learn more about YAML configuration files here:
-    # Agents: https://docs.crewai.com/concepts/agents#yaml-configuration-recommended
-    # Tasks: https://docs.crewai.com/concepts/tasks#yaml-configuration-recommended
-    
-    # If you would like to add tools to your agents, you can learn more about it here:
-    # https://docs.crewai.com/concepts/agents#agent-tools
     @agent
     def emerging_companies_finder(self) -> Agent:
         return Agent(
-            config=self.agents_config['emerging_companies_finder'],tools=[SerperDevTool()])
+            config=self.agents_config['emerging_companies_finder'],tools=[SerperDevTool(search_type="news")])
 
     @agent
     def financial_researcher(self) -> Agent:
@@ -97,13 +92,7 @@ class StockpickerCustom():
             tasks=self.tasks,
             process=Process.hierarchical,
             verbose=True,
-            manager_agent=manager,
-            memory=True
-        )
+            manager_agent=manager
+            )
        
        
-       
-       
-       
-
-        
