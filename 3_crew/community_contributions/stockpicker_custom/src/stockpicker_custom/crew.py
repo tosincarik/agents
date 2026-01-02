@@ -1,14 +1,16 @@
 from crewai import Agent, Crew, Process, Task
-from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
-from tools.push_tool import PushNotificationTool
+from crewai.memory import LongTermMemory, ShortTermMemory, EntityMemory
+from crewai.memory.storage.rag_storage import RAGStorage
+from crewai.memory.storage.ltm_sqlite_storage import LTMSQLiteStorage
+from stockpicker_custom.tools.push_tool import PushNotificationTool
 from typing import List
 from pydantic import BaseModel, Field
-from crewai_tools import SerperDevTool
 
-# If you want to run a snippet of code before or after the crew starts,
-# you can use the @before_kickoff and @after_kickoff decorators
-# https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
+
+
+
+
 
 
 class Trendingcompany(BaseModel):
@@ -89,33 +91,27 @@ class StockpickerCustom():
          )
 
 
-        ShortTermMemory = ShortTermMemory(
+        short_term_memory = ShortTermMemory(
             storage=RAGStorage(
                 embedder_config={
-                    "provider": "openai",
-                    "config": {
-                        "model": "text-embedding-3-small"
-                    }
-                },
+                    "provider": "openai"
+                    },
                 type="short_term",
                 path="./memory/"
             )
          )
 
 
-        LongTermMemory = LongTermMemory(
+        long_term_memory = LongTermMemory(
             storage=LTMSQLiteStorage(
                 db_path="./memory/long_term_memory_storage.db"
             )
          )
         
-        EntityMemory = EntityMemory(
+        entity_memory = EntityMemory(
             storage=RAGStorage(
                 embedder_config={
-                    "provider": "openai",
-                    "config": {
-                        "model": "text-embedding-3-small"
-                    }
+                    "provider": "openai"
                 },
                 type="entity",
                 path="./memory/"
@@ -128,9 +124,9 @@ class StockpickerCustom():
             process=Process.hierarchical,
             verbose=True,
             memory=True,
-            short_term_memory=ShortTermMemory,
-            long_term_memory=LongTermMemory,
-            entity_memory=EntityMemory,
+            short_term_memory=short_term_memory,
+            long_term_memory=long_term_memory,
+            entity_memory=entity_memory,
             manager_agent=manager
             )
 
