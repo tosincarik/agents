@@ -45,7 +45,7 @@ class StockpickerCustom():
     @agent
     def emerging_companies_finder(self) -> Agent:
         return Agent(
-            config=self.agents_config['emerging_companies_finder'],tools=[SerperDevTool(search_type="news")])
+            config=self.agents_config['emerging_companies_finder'],memory=True,tools=[SerperDevTool(search_type="news")])
 
     @agent
     def financial_researcher(self) -> Agent:
@@ -55,7 +55,7 @@ class StockpickerCustom():
     @agent
     def stock_picker(self) -> Agent:
         return Agent(
-            config=self.agents_config['stock_picker'],tools=[PushNotificationTool()])
+            config=self.agents_config['stock_picker'],memory=True,tools=[PushNotificationTool()])
 
     ##defining task
 
