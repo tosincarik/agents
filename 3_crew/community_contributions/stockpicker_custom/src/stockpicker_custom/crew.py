@@ -127,6 +127,10 @@ class StockpickerCustom():
             tasks=self.tasks,
             process=Process.hierarchical,
             verbose=True,
+            memory=True,
+            short_term_memory=ShortTermMemory,
+            long_term_memory=LongTermMemory,
+            entity_memory=EntityMemory,
             manager_agent=manager
             )
 
