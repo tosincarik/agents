@@ -1,0 +1,39 @@
+research_task:
+  description: >
+    Conduct an in-depth, evidence-based research on {company} within the {topic} sector. Focus on gathering the latest, most relevant information including:
+    - Current company status, overall health, and key metrics
+    - Historical company performance and growth trends
+    - Major challenges, risks, and opportunities
+    - Recent news, announcements, and events impacting the company
+    - Future outlook, potential developments, and strategic initiatives
+    Organize your findings in a structured, logical format with clear sections. Ensure all data is up-to-date for {current_year}, and prioritize reliable sources.
+  expected_output: >
+    A structured research document on {company} with well-defined sections. Include:
+    - Facts, figures, and examples where relevant
+    - Clear headings for each section
+    - Concise, actionable insights suitable for further professional analysis
+    Present findings in a way that the reporting analyst can directly use to create a detailed report.
+  agent: researcher
+
+analysis_task:
+  description: >
+    Using the research document produced by the research_task as input, create a comprehensive, professional report on {company}. The report should include:
+    1. An executive summary highlighting the most critical insights
+    2. Detailed sections reflecting all research findings, including current status, historical performance, challenges, opportunities, news, and future outlook
+    3. Insightful analysis of trends, patterns, and implications for the company
+    4. A market outlook for {company}, clearly noting that this is for informational purposes and not investment advice
+    5. Clear, logical structure with headings and subheadings for readability
+    6. Actionable insights and conclusions that would be useful for stakeholders or decision-makers
+    Incorporate all content from the research_task output as context, and expand on it with additional analysis and rationale for findings. Save the final report as a markdown file in the `output/` directory.
+  expected_output: >
+    A fully structured, polished, professional report on {company} in {topic}, formatted as markdown without code fences (``````), saved in the `output/` directory (e.g., `output/{company}_report.md`). The report must include:
+    - Executive summary
+    - Main sections covering research findings and added analysis
+    - Trend and pattern analysis
+    - Market outlook
+    - Key takeaways or conclusions
+    The output should be clear, actionable, evidence-based, and suitable for presentation to stakeholders or decision-makers.
+  agent: reporting_analyst
+  context:
+    - research_task
+  output_file: output/report.md
