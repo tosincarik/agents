@@ -1,6 +1,7 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
+from tools.push_tool import PushNotificationTool
 from typing import List
 from pydantic import BaseModel, Field
 from crewai_tools import SerperDevTool
@@ -54,7 +55,7 @@ class StockpickerCustom():
     @agent
     def stock_picker(self) -> Agent:
         return Agent(
-            config=self.agents_config['stock_picker'])
+            config=self.agents_config['stock_picker'],tools=[PushNotificationTool()])
 
     ##defining task
 
@@ -87,6 +88,40 @@ class StockpickerCustom():
             allow_delegation=True
          )
 
+
+        ShortTermMemory = ShortTermMemory(
+            storage=RAGStorage(
+                embedder_config={
+                    "provider": "openai",
+                    "config": {
+                        "model": "text-embedding-3-small"
+                    }
+                },
+                type="short_term",
+                path="./memory/"
+            )
+         )
+
+
+        LongTermMemory = LongTermMemory(
+            storage=LTMSQLiteStorage(
+                db_path="./memory/long_term_memory_storage.db"
+            )
+         )
+        
+        EntityMemory = EntityMemory(
+            storage=RAGStorage(
+                embedder_config={
+                    "provider": "openai",
+                    "config": {
+                        "model": "text-embedding-3-small"
+                    }
+                },
+                type="entity",
+                path="./memory/"
+            )
+         )
+
         return Crew(
             agents=self.agents,
             tasks=self.tasks,
@@ -94,5 +129,6 @@ class StockpickerCustom():
             verbose=True,
             manager_agent=manager
             )
-       
+
+
        
