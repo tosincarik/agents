@@ -41,8 +41,8 @@ class EmergingCompaniesResearchList(BaseModel):
 class LatestMarketResearch():
     """LatestMarketResearch crew"""
 
-    agents_config = 'latest_market_research/config/agents.yaml'
-    tasks_config = 'latest_market_research/config/tasks.yaml'
+    agents_config = 'config/agents.yaml'
+    tasks_config = 'config/tasks.yaml'
 
 ##Setting up all agents###
     @agent
