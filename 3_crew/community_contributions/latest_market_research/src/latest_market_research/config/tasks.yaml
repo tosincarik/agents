@@ -1,39 +1,29 @@
-research_task:
+find_emerging_companies:
   description: >
-    Conduct an in-depth, evidence-based research on {company} within the {topic} sector. Focus on gathering the latest, most relevant information including:
-    - Current company status, overall health, and key metrics
-    - Historical company performance and growth trends
-    - Major challenges, risks, and opportunities
-    - Recent news, announcements, and events impacting the company
-    - Future outlook, potential developments, and strategic initiatives
-    Organize your findings in a structured, logical format with clear sections. Ensure all data is up-to-date for {current_year}, and prioritize reliable sources.
+    Find the top 5 emerging companies in the {topic} sector.
   expected_output: >
-    A structured research document on {company} with well-defined sections. Include:
-    - Facts, figures, and examples where relevant
-    - Clear headings for each section
-    - Concise, actionable insights suitable for further professional analysis
-    Present findings in a way that the reporting analyst can directly use to create a detailed report.
-  agent: researcher
+    A list of top 5 emerging companies in the {topic} sector.
+  agent: emerging_companies_finder
+  output_file: output/emerging_companies.json
 
-analysis_task:
+research_emerging_companies:
   description: >
-    Using the research document produced by the research_task as input, create a comprehensive, professional report on {company}. The report should include:
-    1. An executive summary highlighting the most critical insights
-    2. Detailed sections reflecting all research findings, including current status, historical performance, challenges, opportunities, news, and future outlook
-    3. Insightful analysis of trends, patterns, and implications for the company
-    4. A market outlook for {company}, clearly noting that this is for informational purposes and not investment advice
-    5. Clear, logical structure with headings and subheadings for readability
-    6. Actionable insights and conclusions that would be useful for stakeholders or decision-makers
-    Incorporate all content from the research_task output as context, and expand on it with additional analysis and rationale for findings. Save the final report as a markdown file in the `output/` directory.
+    Given a list of emerging companies, provide detailed analysis of each company in a report by searching online.
   expected_output: >
-    A fully structured, polished, professional report on {company} in {topic}, formatted as markdown without code fences (``````), saved in the `output/` directory (e.g., `output/{company}_report.md`). The report must include:
-    - Executive summary
-    - Main sections covering research findings and added analysis
-    - Trend and pattern analysis
-    - Market outlook
-    - Key takeaways or conclusions
-    The output should be clear, actionable, evidence-based, and suitable for presentation to stakeholders or decision-makers.
-  agent: reporting_analyst
+    A report containing detailed analysis of each emerging company.
+  agent: financial_researcher
   context:
-    - research_task
-  output_file: output/report.md
+    - find_emerging_companies
+  output_file: output/emerging_companies_research.json
+
+
+pick_best_companies:
+  description: >
+    Given a list of emerging companies with investment potential, you select the best five(5) companies for investment,
+    notifying the user and then providing a detailed report. Don't pick the same company twice. Send a push notification to the user with the decision and 1 sentence rationale.
+  expected_output: >
+    The chosen companies and why they were chosen; the companies that were not selected and why they were not selected.
+  agent: stock_picker
+  context:
+    - research_emerging_companies
+  output_file: output/decision.md

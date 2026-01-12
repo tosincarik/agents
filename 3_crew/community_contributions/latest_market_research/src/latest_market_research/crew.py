@@ -1,64 +1,103 @@
+from multiprocessing import process
+from tabnanny import verbose
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
-# If you want to run a snippet of code before or after the crew starts,
-# you can use the @before_kickoff and @after_kickoff decorators
-# https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
+from pydantic import BaseModel , Field
+from crewai_tools import SerperDevTool
+
+
+##Setting up structured outputs###
+
+class EmergingCompany(BaseModel):
+    """ A company that is in the news and attracting attention"""
+
+    name: str = Field(description="Company name")
+    ticker: str = Field(description="Stock ticker symnol")
+    reason: str = Field(description="Reason this company is trending in the news")
+
+
+class EmergingCompanyList(BaseModel):
+    """List of multiple emerging companies that are in the news"""
+    companies: List(EmergingCompany) = Field(description="List of companies emerging and trending in the news")
+
+
+class EmergingCompaniesResearch(BaseModel):
+    """Detailed research on a company"""
+    name: str = Field(description="Company name")
+    market_positon: str = Field(description="Current market position and competitive analysis")
+    future_outlook : str = Field(description="Future outlook and growth prospect")
+    investment_potential : str = Field(description="Investment potential and suitability for investment")
+
+
+class EmergingCompaniesResearchList(BaseModel):
+    """List of detailed research on the companies"""
+    research_List: List(EmergingCompaniesResearch) = Field(description="Comprehensive research on all trending companies")
+
+
 
 @CrewBase
 class LatestMarketResearch():
     """LatestMarketResearch crew"""
 
-    agents: List[BaseAgent]
-    tasks: List[Task]
+    agents_config = 'latest_market_research/config/agents.yaml'
+    tasks_config = 'latest_market_research/config/tasks.yaml'
 
-    # Learn more about YAML configuration files here:
-    # Agents: https://docs.crewai.com/concepts/agents#yaml-configuration-recommended
-    # Tasks: https://docs.crewai.com/concepts/tasks#yaml-configuration-recommended
+##Setting up all agents###
+    @agent
+    def emerging_companies_finder(self)-> Agent:
+        return Agent(config=self.agents_config['emerging_companies_finder'], tools=[SerperDevTool()])
+
+    @agent
+    def financial_researcher(self)-> Agent:
+        return Agent(config=self.agents_config['financial_researcher'], tools=[SerperDevTool()])
+
+    @agent
+    def stock_picker(self) -> Agent:
+        return Agent(config=self.agents_config['stock_picker'])
+
+
+
+
+
+##Setting up all tasks###
+    @task
+    def find_emerging_companies(self) -> Task:
+        return Task(config=self.tasks_config='find_emerging_companies', output_pydantic=EmergingCompanyList)
     
-    # If you would like to add tools to your agents, you can learn more about it here:
-    # https://docs.crewai.com/concepts/agents#agent-tools
-    @agent
-    def researcher(self) -> Agent:
-        return Agent(
-            config=self.agents_config['researcher'], # type: ignore[index]
-            verbose=True
-        )
-
-    @agent
-    def reporting_analyst(self) -> Agent:
-        return Agent(
-            config=self.agents_config['reporting_analyst'], # type: ignore[index]
-            verbose=True
-        )
-
-    # To learn more about structured task outputs,
-    # task dependencies, and task callbacks, check out the documentation:
-    # https://docs.crewai.com/concepts/tasks#overview-of-a-task
     @task
-    def research_task(self) -> Task:
-        return Task(
-            config=self.tasks_config['research_task'], # type: ignore[index]
-        )
+    def research_emerging_companies(self) -> Task:
+        return Task(config=self.tasks_config='research_emerging_companies',output_pydantic=EmergingCompaniesResearchList)
 
     @task
-    def reporting_task(self) -> Task:
-        return Task(
-            config=self.tasks_config['reporting_task'], # type: ignore[index]
-            output_file='report.md'
-        )
+    def best_company_picker(self) -> Task:
+        return Task(config=self.tasks_config='pick_best_companies')
+
+
+
+##Setting up the crew###
+
+
 
     @crew
     def crew(self) -> Crew:
-        """Creates the LatestMarketResearch crew"""
-        # To learn how to add knowledge sources to your crew, check out the documentation:
-        # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
+        """Creates the stockpicker crew"""
+
+        manager = Agent(
+            config=self.agents_config['manager'],
+            allow_delegation=True
+        )
+
+
 
         return Crew(
-            agents=self.agents, # Automatically created by the @agent decorator
-            tasks=self.tasks, # Automatically created by the @task decorator
-            process=Process.sequential,
+            agents=self.agents,
+            tasks=self.tasks,
+            process=Process.hierarchical,
             verbose=True,
-            # process=Process.hierarchical, # In case you wanna use that instead https://docs.crewai.com/how-to/Hierarchical/
-        )
+            manager_agent=manager
+            )
+    
+
+
