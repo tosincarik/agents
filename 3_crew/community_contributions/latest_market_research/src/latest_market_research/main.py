@@ -12,7 +12,7 @@ def run():
     Run the crew.
     """
     inputs = {
-        'Sector': 'Technology'
+        'topic': 'Technology'
     }
 
     #Create and run the crew
