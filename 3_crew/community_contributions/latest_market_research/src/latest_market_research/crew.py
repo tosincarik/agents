@@ -20,7 +20,7 @@ class EmergingCompany(BaseModel):
 
 class EmergingCompanyList(BaseModel):
     """List of multiple emerging companies that are in the news"""
-    companies: List(EmergingCompany) = Field(description="List of companies emerging and trending in the news")
+    companies: List[EmergingCompany] = Field(description="List of companies emerging and trending in the news")
 
 
 class EmergingCompaniesResearch(BaseModel):
@@ -33,7 +33,7 @@ class EmergingCompaniesResearch(BaseModel):
 
 class EmergingCompaniesResearchList(BaseModel):
     """List of detailed research on the companies"""
-    research_List: List(EmergingCompaniesResearch) = Field(description="Comprehensive research on all trending companies")
+    research_List: List[EmergingCompaniesResearch] = Field(description="Comprehensive research on all trending companies")
 
 
 

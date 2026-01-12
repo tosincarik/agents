@@ -1,3 +1,5 @@
+import warnings
+
 from datetime import datetime
 
 from latest_market_research.crew import LatestMarketResearch
