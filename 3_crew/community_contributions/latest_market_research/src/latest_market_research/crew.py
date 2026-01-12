@@ -64,15 +64,15 @@ class LatestMarketResearch():
 ##Setting up all tasks###
     @task
     def find_emerging_companies(self) -> Task:
-        return Task(config=self.tasks_config=['find_emerging_companies'], output_pydantic=EmergingCompanyList)
+        return Task(config=self.tasks_config['find_emerging_companies'], output_pydantic=EmergingCompanyList)
     
     @task
     def research_emerging_companies(self) -> Task:
-        return Task(config=self.tasks_config=['research_emerging_companies'],output_pydantic=EmergingCompaniesResearchList)
+        return Task(config=self.tasks_config['research_emerging_companies'],output_pydantic=EmergingCompaniesResearchList)
 
     @task
     def best_company_picker(self) -> Task:
-        return Task(config=self.tasks_config=['pick_best_companies'])
+        return Task(config=self.tasks_config['pick_best_companies'])
 
 
 
