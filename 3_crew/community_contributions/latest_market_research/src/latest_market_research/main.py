@@ -17,7 +17,7 @@ def run():
 
     #Create and run the crew
 
-    result = LatestMarketResearch.crew().kickoff(inputs=inputs)
+    result = LatestMarketResearch().crew().kickoff(inputs=inputs)
 
 
     #Print the result
