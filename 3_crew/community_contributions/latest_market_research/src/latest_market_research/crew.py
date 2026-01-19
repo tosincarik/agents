@@ -6,6 +6,9 @@ from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
 from pydantic import BaseModel , Field
 from crewai_tools import SerperDevTool
+from crewai.memory import LongTermMemory,ShortTermMemory, EntityMemory
+from crewai.memory.storage.rag.storage import RAGStorage
+from crewai.memory.storage.llm_sqlite_storage import LTMSQLiteStorage
 
 
 ##Setting up structured outputs###
