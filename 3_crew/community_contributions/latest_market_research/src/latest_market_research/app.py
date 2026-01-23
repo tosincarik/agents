@@ -4,16 +4,29 @@ from latest_market_research.crew import LatestMarketResearch
 
 app = FastAPI(title="Stock Picker API")
 
-# Define the expected user input schema
+# ------------------------------
+# Pydantic model for user input
+# ------------------------------
 class StockPickerInput(BaseModel):
     topic: str
     risk_profile: str
     investment_horizon: str
     region: str
     market_cap_preference: str
-    number_of_picks: str  # can be int if you want to cast later
+    number_of_picks: int  # cast to int directly
 
 
+# ------------------------------
+# Health check / root endpoint
+# ------------------------------
+@app.get("/")
+def read_root():
+    return {"message": "Stock Picker API is running!"}
+
+
+# ------------------------------
+# Main stock picker endpoint
+# ------------------------------
 @app.post("/stock-picker")
 def stock_picker_endpoint(inputs: StockPickerInput):
     """
@@ -23,7 +36,8 @@ def stock_picker_endpoint(inputs: StockPickerInput):
     input_dict = inputs.dict()
 
     # Run the crew
-    result = LatestMarketResearch().crew().kickoff(inputs=input_dict)
+    crew_instance = LatestMarketResearch()
+    result = crew_instance.crew().kickoff(inputs=input_dict)
 
     # Return JSON
     return {"results": result.raw}
