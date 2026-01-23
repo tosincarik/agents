@@ -6,7 +6,7 @@ from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
 from pydantic import BaseModel , Field
 from crewai_tools import SerperDevTool
-from crewai.memory import Memory
+
 
 
 
@@ -50,7 +50,7 @@ class LatestMarketResearch():
 ##Setting up all agents###
     @agent
     def emerging_companies_finder(self)-> Agent:
-        return Agent(config=self.agents_config['emerging_companies_finder'], tools=[SerperDevTool()], memory=True)
+        return Agent(config=self.agents_config['emerging_companies_finder'], tools=[SerperDevTool()])
 
     @agent
     def financial_researcher(self)-> Agent:
@@ -58,7 +58,7 @@ class LatestMarketResearch():
 
     @agent
     def stock_picker(self) -> Agent:
-        return Agent(config=self.agents_config['stock_picker'], memory=True)
+        return Agent(config=self.agents_config['stock_picker'])
 
 
 
