@@ -6,9 +6,9 @@ from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
 from pydantic import BaseModel , Field
 from crewai_tools import SerperDevTool
-from crewai.memory import LongTermMemory,ShortTermMemory, EntityMemory
-from crewai.memory.storage.rag_storage import RAGStorage
-from crewai.memory.storage.llm_sqlite_storage import LTMSQLiteStorage
+from crewai.memory import Memory
+
+
 
 
 ##Setting up structured outputs###
@@ -92,40 +92,6 @@ class LatestMarketResearch():
             allow_delegation=True
         )
 
-        short_term_memory = ShortTermMemory(
-
-            storage = RAGStorage(
-                embedder_config={
-                    "provider": "openai",
-                    "config": {
-                        "model": 'text-embedding-3-small'
-                    }
-                },
-                type="short_term",
-                path="./memory/"
-            )
-        )
-
-        long_term_memory = LongTermMemory(
-            storage=LTMSQLiteStorage(
-                db_path="./memory/long_term_memory_storage.db"
-            )
-        )
-
-        entity_memory = EntityMemory(
-            storage=RAGStorage(
-                embedder_config={
-                    "provider":"openai",
-                    "config":{
-                        "model":'text-embedding-3-small'
-                    }
-                },
-                type="short_term",
-                path="./memory/"
-            )
-        )
-
-
 
         return Crew(
             agents=self.agents,
@@ -133,13 +99,5 @@ class LatestMarketResearch():
             process=Process.hierarchical,
             verbose=True,
             manager_agent=manager,
-            memory = True,
-            short_term_memory = short_term_memory,
-            long_term_memory=long_term_memory,
-            entity_memory = entity_memory            
-            
-            
+            memory = True   
             )
-    
-
-
