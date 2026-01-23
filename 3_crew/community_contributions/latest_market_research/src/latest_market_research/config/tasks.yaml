@@ -1,8 +1,9 @@
 find_emerging_companies:
   description: >
-    Find the top 5 emerging companies in the {topic} sector.
+    Find the top emerging companies in the {topic} sector,
+    focusing on the {region} region and aligned with {market_cap_preference}-cap preferences.
   expected_output: >
-    A list of top 5 emerging companies in the {topic} sector.
+    A list of emerging companies in the {topic} sector with brief explanations for why they are trending.
   agent: emerging_companies_finder
   output_file: output/emerging_companies.json
 
@@ -19,8 +20,11 @@ research_emerging_companies:
 
 pick_best_companies:
   description: >
-    Given a list of emerging companies with investment potential, you select the best five(5) companies for investment,
-    notifying the user and then providing a detailed report. Don't pick the same company twice. Send a push notification to the user with the decision and 1 sentence rationale.
+    Given a list of emerging companies with investment potential, 
+    select the best {number_of_picks} companies for investment
+    based on the user's risk profile and investment horizon.
+    Don't pick the same company twice. 
+    Notify the user with a 1-sentence rationale for the final selection.
   expected_output: >
     The chosen companies and why they were chosen; the companies that were not selected and why they were not selected.
   agent: stock_picker
