@@ -12,7 +12,12 @@ def run():
     Run the crew.
     """
     inputs = {
-        'topic': 'Technology'
+        'topic': 'Technology',
+        'risk_profile': 'High',
+        'investment_horizon':'Short',
+        'region': 'Europe',
+        'market_cap_preference':'any',
+        'number_of_picks':'3'
     }
 
     #Create and run the crew
