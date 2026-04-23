@@ -10,8 +10,8 @@ from typing import List
 class Coderagentproject():
     """Coderagentproject crew"""
 
-    agents_config = "agents.yaml"
-    tasks_config = 'tasks.yaml'
+    agents_config = 'config/agents.yaml'
+    tasks_config = 'configtasks.yaml'
     
 
     
@@ -27,8 +27,8 @@ class Coderagentproject():
         )
 
     @task
-    def tasks(self) -> Agent:
-        return Agent(
+    def coding_task(self) -> Agent:
+        return Task(
             config = self.tasks_config['coding_task']
         )
 
