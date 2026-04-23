@@ -20,7 +20,7 @@ class Coderagentproject():
         return Agent(
             config= self.agents_config['coder'],
             verbose = True,
-            allow_code_execution = True,
+            allow_code_execution = False,
             code_execution_mode = "safe",
             max_execution_time = 30,
             max_retry_limit = 3
