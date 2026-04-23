@@ -11,7 +11,7 @@ class Coderagentproject():
     """Coderagentproject crew"""
 
     agents_config = 'config/agents.yaml'
-    tasks_config = 'configtasks.yaml'
+    tasks_config = 'config/tasks.yaml'
     
 
     
